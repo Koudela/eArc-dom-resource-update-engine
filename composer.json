@@ -1,0 +1,22 @@
+{
+    "name": "earc/dom-resource-update-engine",
+    "description": "Simple yet powerful resource update engine",
+    "type": "library",
+    "license": "MIT",
+    "version": "0.0-RC",
+    "authors": [
+        {
+            "name": "Thomas Koudela",
+            "email": "thomas@koudela.net"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable" : true,
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "eArc\\DomResourceUpdateEngine\\": "src"
+        }
+    }
+}
