@@ -210,7 +210,23 @@ let domResourceUpdateEngine = {};
         }
     }
 
+    let processAttributeNotation = function(elm, url) {
+        const hashPos = url.indexOf('/#');
+
+        if (-1 !== hashPos) {
+            const attrName = url.substr(hashPos+2);
+            const attrContent = 'value' === attrName ? elm.value : elm.getAttribute(attrName);
+            url = processAttributeNotation(elm, url.substr(0, hashPos));
+            if (attrContent) {
+                url += '/' + encodeURI(attrContent);
+            }
+        }
+
+        return url;
+    }
+
     let processFetch = function(elm, url) {
+        url = processAttributeNotation(elm, url);
         let init = 'form' !== elm.nodeName.toLowerCase() ? null : {
             method: elm.getAttribute('method'),
             body: new FormData(elm)
