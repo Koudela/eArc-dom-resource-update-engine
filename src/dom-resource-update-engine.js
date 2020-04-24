@@ -166,13 +166,13 @@ let domResourceUpdateEngine = {};
 
                             for (const [, targetElm] of Object.entries(targetElms)) {
                                 if (eventType === 'load') {
-                                    processEvent(targetElm, targetActionTypes);
+                                    processEvent(targetElm, targetActionTypes, updateId);
                                 }
                                 elm.addEventListener(eventType, (ev) => {
                                     if ('submit' === eventType) {
                                         ev.preventDefault();
                                     }
-                                    processEvent(targetElm, targetActionTypes);
+                                    processEvent(targetElm, targetActionTypes, updateId);
                                 });
                             }
                         }
@@ -182,7 +182,7 @@ let domResourceUpdateEngine = {};
         });
     }
 
-    let processEvent = function(elm, actionTypes) {
+    let processEvent = function(elm, actionTypes, updateId) {
         const updateDirective = cache.getDirective(elm);
 
         if (updateDirective) {
@@ -198,7 +198,7 @@ let domResourceUpdateEngine = {};
 
                     return;
                 }
-                const id = cache.getId(elm);
+                const id = updateId ? updateId : cache.getId(elm);
                 for (const action of actions) {
                     if (cache.hasAction(id, action) && (null === actionTypes || actionTypes.hasOwnProperty(action))) {
                         processFetch(elm, url);
