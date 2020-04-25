@@ -23,7 +23,7 @@ data-update-filter="[action1, action2]"
 
 data-update-id="Tmpl:Instance:ID"
 
-data-update-resources="{ "URL": [action1, action2]|*,...}"
+data-update-resources="{ "URL"|"URL/#attrName/#otherAttr": [action1, action2]|*,...}"
 
 data-update-directives="UPDATE-DIRECTIVE"
 

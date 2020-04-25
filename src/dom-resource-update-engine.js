@@ -211,14 +211,17 @@ let domResourceUpdateEngine = {};
     }
 
     let processAttributeNotation = function(elm, url) {
-        const hashPos = url.indexOf('/#');
+        const hashPos = url.lastIndexOf('/');
 
         if (-1 !== hashPos) {
-            const attrName = url.substr(hashPos+2);
-            const attrContent = 'value' === attrName ? elm.value : elm.getAttribute(attrName);
+            const identifier = url.substr(hashPos+1).split('#');
             url = processAttributeNotation(elm, url.substr(0, hashPos));
-            if (attrContent) {
-                url += '/' + encodeURI(attrContent);
+            if (2 === identifier.length)  {
+                const targetElm = identifier[0] ? document.getElementById(identifier[0]) : elm
+                const attrContent = 'value' === identifier[1] ? targetElm.value : targetElm.getAttribute(identifier[1]);
+                if (attrContent) {
+                    url += '/' + encodeURIComponent(attrContent);
+                }
             }
         }
 
