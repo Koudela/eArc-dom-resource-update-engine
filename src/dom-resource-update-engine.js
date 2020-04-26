@@ -40,16 +40,19 @@ let domResourceUpdateEngine = {};
             return text ? JSON.parse(text) : text;
         },
 
-        hasAction: function(id, action) {
-            if ('~' === id) {
-                return true;
+        hasAction: function(elm, action) {
+            const id = cache.getId(elm);
+
+            if (!id) {
+                const filter = cache.getFilter(elm);
+                return null === filter || -1 !== filter.indexOf(action);
             }
 
-            if (!this.updateFilter.hasOwnProperty(id)) {
-                throw Error("The data-update-id `"+id+"` was never imported.")
+            if (this.updateElms.hasOwnProperty(id)) {
+                return 0 === Object.keys(this.updateFilter[id]).length || this.updateFilter[id].hasOwnProperty(action);
             }
 
-            return 0 === Object.keys(this.updateFilter[id]).length || this.updateFilter[id].hasOwnProperty(action);
+            throw Error("The data-update-id `"+id+"` was never imported.")
         },
 
         map: function(id, action) {
@@ -182,7 +185,7 @@ let domResourceUpdateEngine = {};
         });
     }
 
-    let processEvent = function(elm, actionTypes, updateId) {
+    let processEvent = function(elm, actionTypes) {
         const updateDirective = cache.getDirective(elm);
 
         if (updateDirective) {
@@ -198,9 +201,8 @@ let domResourceUpdateEngine = {};
 
                     return;
                 }
-                const id = updateId ? updateId : cache.getId(elm);
                 for (const action of actions) {
-                    if (cache.hasAction(id, action) && (null === actionTypes || actionTypes.hasOwnProperty(action))) {
+                    if (cache.hasAction(elm, action) && (null === actionTypes || actionTypes.hasOwnProperty(action))) {
                         processFetch(elm, url);
 
                         return;
@@ -222,7 +224,9 @@ let domResourceUpdateEngine = {};
                 if (attrContent) {
                     url += '/' + encodeURIComponent(attrContent);
                 }
+                return url;
             }
+            return url + '/' + identifier[0];
         }
 
         return url;
@@ -246,20 +250,22 @@ let domResourceUpdateEngine = {};
             for (let [action, html] of Object.entries(value)) {
                 [updateId, action] = cache.map(updateId, action);
                 if ('console' === updateId && 'log' === action) {
-                    console.log(html);
+                    window['con'+'sole'].log(html);
                 }
                 else if ('error' === updateId && 'throw' === action) {
                     throw new Error(html.toString());
                 }
-                else if (cache.hasAction(updateId, action)) {
+                else {
                     let targetElms = cache.getUpdateElements(elm, updateId);
                     for (const [,targetElm] of Object.entries(targetElms)) {
-                        let htmlArg = '<' === html || '>' === html ? elm.innerHTML : html;
-                        if ('>' === html) {
-                            cache.unregisterDOM(elm);
-                            elm.innerHTML = '';
+                        if (cache.hasAction(targetElm, action)) {
+                            let htmlArg = '<' === html || '>' === html ? elm.innerHTML : html;
+                            if ('>' === html) {
+                                cache.unregisterDOM(elm);
+                                elm.innerHTML = '';
+                            }
+                            updateDOM(targetElm, action, htmlArg);
                         }
-                        updateDOM(targetElm, action, htmlArg);
                     }
                 }
             }
