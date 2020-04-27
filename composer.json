@@ -3,7 +3,7 @@
     "description": "Simple yet powerful resource update engine",
     "type": "library",
     "license": "MIT",
-    "version": "0.0-RC",
+    "version": "0.0",
     "authors": [
         {
             "name": "Thomas Koudela",

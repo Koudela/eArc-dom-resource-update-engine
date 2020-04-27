@@ -232,12 +232,13 @@ let domResourceUpdateEngine = {};
             if (2 === identifier.length)  {
                 const targetElm = identifier[0] ? document.getElementById(identifier[0]) : elm
                 const attrContent = getAttributeValue(targetElm, identifier[1]);
-                if (null !== attrContent) {
-                    url += '/' + encodeURIComponent(attrContent);
+                if (null === attrContent || '' === attrContent) {
+                    return url + '/null'
                 }
-                return url;
+                return url + '/' + encodeURIComponent(attrContent);;
             }
-            return url + '/' + identifier[0];
+
+            return url + '/' + identifier.join('#');
         }
 
         return url;
