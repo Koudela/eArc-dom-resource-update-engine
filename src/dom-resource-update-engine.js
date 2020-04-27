@@ -212,6 +212,17 @@ let domResourceUpdateEngine = {};
         }
     }
 
+    let getAttributeValue = function(elm, attrName) {
+        switch (attrName) {
+            case 'value':
+                return elm.value;
+            case 'checked':
+                return elm.checked ? 1 : 0;
+            default:
+                return elm.getAttribute(attrName)
+        }
+    }
+
     let processAttributeNotation = function(elm, url) {
         const hashPos = url.lastIndexOf('/');
 
@@ -220,8 +231,8 @@ let domResourceUpdateEngine = {};
             url = processAttributeNotation(elm, url.substr(0, hashPos));
             if (2 === identifier.length)  {
                 const targetElm = identifier[0] ? document.getElementById(identifier[0]) : elm
-                const attrContent = 'value' === identifier[1] ? targetElm.value : targetElm.getAttribute(identifier[1]);
-                if (attrContent) {
+                const attrContent = getAttributeValue(targetElm, identifier[1]);
+                if (null !== attrContent) {
                     url += '/' + encodeURIComponent(attrContent);
                 }
                 return url;
