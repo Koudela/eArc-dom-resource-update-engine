@@ -213,6 +213,10 @@ let domResourceUpdateEngine = {};
     }
 
     let getAttributeValue = function(elm, attrName) {
+        if (null === elm) {
+            return null;
+        }
+
         switch (attrName) {
             case 'value':
                 return elm.value;
@@ -235,7 +239,7 @@ let domResourceUpdateEngine = {};
                 if (null === attrContent || '' === attrContent) {
                     return url + '/null'
                 }
-                return url + '/' + encodeURIComponent(attrContent);;
+                return url + '/' + encodeURIComponent(attrContent);
             }
 
             return url + '/' + identifier.join('#');
