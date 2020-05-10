@@ -127,7 +127,7 @@ let domResourceUpdateEngine = {};
         },
 
         unregisterDOM: function(root) {
-            root.querySelectorAll('[data-update-id]').forEach(this.unregisterElement);
+            root.querySelectorAll('[data-update-id]').forEach(this.unregisterElement.bind(this));
         }
     }
 
