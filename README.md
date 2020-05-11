@@ -48,7 +48,7 @@ Call at the last line of your pages body the `init()` function of the `domResour
 
 ```html
         // ...
-        <script>domResourceUpdateEngine.init();</script>
+        <script>ResourceUpdateEngine.init();</script>
     </body>
 </html>
 ```
@@ -208,3 +208,33 @@ data-update-resources="{ "URL"|"URL/elm-id#attrName/#otherAttr": [action1, actio
 data-update-directives="UPDATE-DIRECTIVE"
 
 ID-MAPPING: { "oldId" : { action|* : { id: "newId", action: "newAction" }}}
+
+→ data-update
+
+update.trigger: 	js.event.type			default: click
+update.url: 		url				default: null
+update.exec: 		string[]				default: []
+
+data-update=[{ trigger: <string>, url: <string>, exec: <string[]> }]
+
+
+exec: pluginEvent!arg1:arg2:arg3
+
+exec: dom!action:selector
+dom.action:		string			default: update
+dom.selector:		this || selector		default: ~
+data-resource=
+
+exec: ev!ṭype:selector:bubbles:cancelable
+ev.type:		string			default: update
+ev.selector:		this || selector		default: ~
+ev.bubbles:		true || false		default: true
+ev.cancelable:		true || false		default: true
+
+resource-update-directive
+selector: action: html
+
+TODO: attributes, css
+
+exec: redirect!url
+redirect.url string default: ---
