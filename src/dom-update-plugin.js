@@ -2,7 +2,7 @@ function DomUpdatePlugin(element, ev, argv, response) {
     'use strict';
 
     let init = function() {
-        if (null === response) {
+        if (null === response && ev.hasOwnProperty('detail')) {
             response = ev.detail;
         }
 
